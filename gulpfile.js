@@ -6,6 +6,7 @@ var gulp         = require('gulp'),
 		browserSync  = require('browser-sync').create(),
 		concat       = require('gulp-concat'),
 		htmlbeautify = require('gulp-html-beautify'),
+		changed      = require('gulp-changed'),
 		jade         = require('gulp-jade'),
 		spritesmith = require('gulp.spritesmith'),
 		uglify       = require('gulp-uglify');
@@ -39,10 +40,14 @@ gulp.task('browser-sync', ['styles', 'scripts', 'jade'], function() {
 
 
 gulp.task('jade', function() {
+	var options = {
+    indentSize: 2,
+    indent_with_tabs: true
+  };
     return gulp.src('./jade/**/*.jade')
     		.pipe(changed('/app/', {extension: '.html'}))
         .pipe(jade())
-        .pipe(htmlbeautify()) 
+        .pipe(htmlbeautify(options)) 
         .pipe(gulp.dest('./app'));
 });
 
