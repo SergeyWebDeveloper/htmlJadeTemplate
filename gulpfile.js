@@ -40,6 +40,7 @@ gulp.task('browser-sync', ['styles', 'scripts', 'jade'], function() {
 
 gulp.task('jade', function() {
     return gulp.src('./jade/**/*.jade')
+    		.pipe(changed('/app/', {extension: '.html'}))
         .pipe(jade())
         .pipe(htmlbeautify()) 
         .pipe(gulp.dest('./app'));
@@ -47,12 +48,13 @@ gulp.task('jade', function() {
 
 gulp.task('styles', function () {
 	return gulp.src('sass/*.sass')
+	.pipe(changed('/app/css', {extension: '.css'}))
 	.pipe(sass({
 		includePaths: require('node-bourbon').includePaths
 	}).on('error', sass.logError))
 	.pipe(rename({suffix: '.min', prefix : ''}))
 	.pipe(autoprefixer({browsers: ['last 25 versions'], cascade: false}))
-	.pipe(cleanCSS())
+	// .pipe(cleanCSS())
 	.pipe(gulp.dest('app/css'))
 	.pipe(browserSync.stream());
 });
@@ -64,20 +66,21 @@ gulp.task('scripts', function() {
 		'./libs/inputmask/jquery.maskedinput.min.js',
 		'./libs/owlcarousel/owl.carousel.min.js'
 		])
+		.pipe(changed('/app/js', {extension: '.js'}))
 		.pipe(concat('libs.js'))
 		.pipe(uglify()) //Minify libs.js
 		.pipe(gulp.dest('./app/js/'));
 });
 
-gulp.task('htmlbeautify', function() {
-  var options = {
-    indentSize: 2,
-    indent_with_tabs: true
-  };
-  gulp.src('./app/*.html')
-    .pipe(htmlbeautify(options))
-    .pipe(gulp.dest('./app/'))
-});
+// gulp.task('htmlbeautify', function() {
+//   var options = {
+//     indentSize: 2,
+//     indent_with_tabs: true
+//   };
+//   gulp.src('./app/*.html')
+//     .pipe(htmlbeautify(options))
+//     .pipe(gulp.dest('./app/'))
+// });
 
 gulp.task('watch', function () {
 	gulp.watch('sass/*.sass', ['styles']);
