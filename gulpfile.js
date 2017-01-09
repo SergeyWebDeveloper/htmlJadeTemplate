@@ -40,7 +40,8 @@ gulp.task('browser-sync', ['styles', 'scripts', 'jade'], function() {
 
 gulp.task('jade', function() {
     return gulp.src('./jade/**/*.jade')
-        .pipe(jade()) 
+        .pipe(jade())
+        .pipe(htmlbeautify()) 
         .pipe(gulp.dest('./app'));
 });
 
